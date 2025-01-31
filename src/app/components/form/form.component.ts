@@ -69,14 +69,14 @@ export class FormComponent implements OnInit {
         // POST form data to backend
         const response = await this.http
           .post('http://localhost:3000/api/intents', this.intentForm.value)
-          .toPromise(); // Make sure to replace the URL with your backend API endpoint
+          .toPromise(); 
 
         console.log('Response from backend:', response);
 
         this.submitted = true;
         this.submitSuccess = true;
         this.intentForm.reset();
-        this.initForm(); // Reset to initial state with one empty training phrase
+        this.initForm(); 
       } catch (error) {
         this.submitted = true;
         this.submitSuccess = false;
@@ -85,7 +85,7 @@ export class FormComponent implements OnInit {
         this.isSubmitting = false;
       }
     } else {
-      // Mark all fields as touched to trigger validation messages
+  
       Object.keys(this.intentForm.controls).forEach((key) => {
         const control = this.intentForm.get(key);
         control?.markAsTouched();
