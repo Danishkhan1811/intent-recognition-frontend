@@ -1,0 +1,82 @@
+<div class="container">
+    <h2 class="title">Create New Intent</h2>
+    
+    <!-- Success/Error Messages -->
+    <div *ngIf="submitted">
+      <div *ngIf="submitSuccess" class="success-message">
+        Intent created successfully!
+      </div>
+      <div *ngIf="!submitSuccess" class="error-message">
+        Failed to create intent. Please try again.
+      </div>
+    </div>
+  
+    <form [formGroup]="intentForm" (ngSubmit)="onSubmit()">
+      <!-- Intent Name -->
+      <div class="form-group">
+        <label>Intent Name</label>
+        <input 
+          type="text" 
+          placeholder="e.g., Check Balance"
+          formControlName="intentName"
+          [ngClass]="{'invalid': isFieldInvalid('intentName')}"
+        >
+        <div *ngIf="isFieldInvalid('intentName')" class="error-text">
+          Intent name is required
+        </div>
+      </div>
+  
+      <!-- Training Phrases -->
+      <div class="form-group" formArrayName="trainingPhrases">
+        <label>Training Phrases</label>
+        <div *ngFor="let phrase of trainingPhrases.controls; let i=index" class="phrase-group">
+          <input 
+            placeholder="e.g., Enter a Training Phrase (e.g., What is my balance?)"
+            [formControlName]="i"
+            [ngClass]="{'invalid': isTrainingPhraseInvalid(i)}"
+          >
+          <button 
+            type="button" 
+            (click)="removeTrainingPhrase(i)"
+            class="remove-button"
+            [disabled]="trainingPhrases.length === 1"
+          >
+          <i class="fa-solid fa-circle-minus"></i>
+          </button>
+        </div>
+        <button 
+          type="button" 
+          (click)="addTrainingPhrase()"
+          class="add-button"
+        >
+        <i class="fa-solid fa-circle-plus"></i> Add Phrase
+        </button>
+        <div *ngIf="isTrainingPhrasesInvalid()" class="error-text">
+          At least one training phrase is required
+        </div>
+      </div>
+  
+      <!-- Response -->
+      <div class="form-group">
+        <label>Response</label>
+        <textarea 
+          placeholder="Enter the chatbot's response for this intent (e.g., Your Balance is $500)"
+          formControlName="response"
+          rows="4"
+          [ngClass]="{'invalid': isFieldInvalid('response')}"
+        ></textarea>
+        <div *ngIf="isFieldInvalid('response')" class="error-text">
+          Response is required
+        </div>
+      </div>
+  
+      <!-- Submit Button -->
+      <button 
+        type="submit"
+        class="submit-button"
+        [disabled]="intentForm.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Saving...' : 'Save Intent' }}
+      </button>
+    </form>
+  </div>
